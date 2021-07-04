@@ -14,9 +14,6 @@ class AddLocationViewController: UIViewController, MKMapViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        getCoordinate(addressString: "Huntsvilla, Alabama") { <#CLLocationCoordinate2D#>, <#NSError?#> in
-            <#code#>
-        }
     }
     
     /*
