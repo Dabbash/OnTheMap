@@ -11,6 +11,12 @@ class StudentsLocationTableViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     
+    
+    override func viewWillAppear(_ animated: Bool) {
+            super.viewWillAppear(animated)
+            tableView.reloadData()
+        }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -31,11 +37,6 @@ class StudentsLocationTableViewController: UIViewController {
         }
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        tableView.reloadData()
-    }
     
 }
 
@@ -72,6 +73,16 @@ extension StudentsLocationTableViewController: UITableViewDataSource, UITableVie
             }
         }
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    func refreshData() {
+        print("called")
+        _ = OTMClient.getStudentsLocation() { locations, error in
+            OTMModel.studentsLocations = locations
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
     }
     
 }

@@ -37,7 +37,7 @@ class OTMClient {
             case .studentsLocation:
                 return Endpoints.udacityBase + "StudentLocation"
             case .getStudentsLocationWithKey:
-                return Endpoints.udacityBase + "StudentLocation?uniqueKey=983985615173"
+                return Endpoints.udacityBase + "StudentLocation?order=-updatedAt"
             case .session:
                 return Endpoints.udacityBase + "session"
             case .publicUserData:

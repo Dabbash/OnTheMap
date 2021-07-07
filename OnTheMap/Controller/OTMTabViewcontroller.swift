@@ -53,4 +53,10 @@ class OTMTabViewcontroller: UITabBarController {
         
         present(postInformationVC, animated: true, completion: nil)
     }
+    
+    @IBAction func refreshButtonAction(_ sender: Any) {
+        print("calling")
+        StudentsLocationTableViewController().refreshData()
+    }
+    
 }
