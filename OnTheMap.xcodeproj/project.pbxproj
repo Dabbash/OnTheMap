@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		898012702696004E00948E49 /* AddStudentLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8980126F2696004E00948E49 /* AddStudentLocation.swift */; };
+		8980127226961AA200948E49 /* AddLocationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8980127126961AA200948E49 /* AddLocationResponse.swift */; };
 		8984109E268FA4D700E48810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8984109D268FA4D700E48810 /* AppDelegate.swift */; };
 		898410A0268FA4D700E48810 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8984109F268FA4D700E48810 /* SceneDelegate.swift */; };
 		898410A2268FA4D700E48810 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 898410A1268FA4D700E48810 /* LoginViewController.swift */; };
@@ -30,6 +32,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8980126F2696004E00948E49 /* AddStudentLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddStudentLocation.swift; sourceTree = "<group>"; };
+		8980127126961AA200948E49 /* AddLocationResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddLocationResponse.swift; sourceTree = "<group>"; };
 		8984109A268FA4D700E48810 /* OnTheMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnTheMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8984109D268FA4D700E48810 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8984109F268FA4D700E48810 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -140,6 +144,7 @@
 				898410C12690510500E48810 /* LoginRequest.swift */,
 				898410D02690B26100E48810 /* UdacityLoginRequest.swift */,
 				898410D42690FA9C00E48810 /* User.swift */,
+				8980126F2696004E00948E49 /* AddStudentLocation.swift */,
 			);
 			path = "OTM Requests";
 			sourceTree = "<group>";
@@ -147,6 +152,7 @@
 		898410B6268FA52E00E48810 /* OTM Responses */ = {
 			isa = PBXGroup;
 			children = (
+				8980127126961AA200948E49 /* AddLocationResponse.swift */,
 				898410BD26904FBD00E48810 /* StudentsLocation.swift */,
 				898410BF269050DE00E48810 /* OTMResponse.swift */,
 				898410C62690553800E48810 /* OTMResults.swift */,
@@ -243,6 +249,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				898012702696004E00948E49 /* AddStudentLocation.swift in Sources */,
 				898410BE26904FBD00E48810 /* StudentsLocation.swift in Sources */,
 				898410C52690515A00E48810 /* OTMClient.swift in Sources */,
 				898410A2268FA4D700E48810 /* LoginViewController.swift in Sources */,
@@ -258,6 +265,7 @@
 				898410D32690B38F00E48810 /* SessionResponse.swift in Sources */,
 				898410C0269050DE00E48810 /* OTMResponse.swift in Sources */,
 				898410D7269100AF00E48810 /* AddLocationViewController.swift in Sources */,
+				8980127226961AA200948E49 /* AddLocationResponse.swift in Sources */,
 				898410CB2690931300E48810 /* OTMModel.swift in Sources */,
 				898410C22690510500E48810 /* LoginRequest.swift in Sources */,
 			);

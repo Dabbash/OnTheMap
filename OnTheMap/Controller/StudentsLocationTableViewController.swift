@@ -52,12 +52,26 @@ extension StudentsLocationTableViewController: UITableViewDataSource, UITableVie
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "studentsLocationCell")!
         
-        let locations = OTMModel.studentsLocations[indexPath.row]
+        let studentsLocations = OTMModel.studentsLocations[indexPath.row]
         
         cell.imageView?.image = UIImage(named: "icon_pin")
-        cell.textLabel?.text = locations.firstName
+        cell.textLabel?.text = "\(studentsLocations.firstName) \(studentsLocations.lastName)"
+        cell.detailTextLabel?.text = studentsLocations.mediaURL
         
         
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let studentsLocations = OTMModel.studentsLocations[indexPath.row]
+        let urlString = studentsLocations.mediaURL
+        if let url = URL(string: urlString)
+        {
+            UIApplication.shared.open(url, options: [:]) { (Bool) in
+                return
+            }
+        }
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
 }

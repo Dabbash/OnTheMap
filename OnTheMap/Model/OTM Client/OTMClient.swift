@@ -10,25 +10,38 @@ import Foundation
 class OTMClient {
     
     struct Auth {
-        static var key = ""
         static var sessionId = ""
     }
     
+    struct UserData {
+        static var key = ""
+        static var firstName = ""
+        static var lastName = ""
+        static var longitude: Float = 0.0
+        static var latitude: Float = 0.0
+        static var mapString = ""
+        static var mediaURL = ""
+        static var objectId = ""
+    }
+    
     enum Endpoints {
-        static let udacityBase = "https://onthemap-api.udacity.com/v1"
+        static let udacityBase = "https://onthemap-api.udacity.com/v1/"
         
-        case getStudentsLocation
+        case studentsLocation
+        case getStudentsLocationWithKey
         case session
         case publicUserData
 
         var stringValue: String {
             switch self {
-            case .getStudentsLocation:
-                return Endpoints.udacityBase + "/StudentLocation"
+            case .studentsLocation:
+                return Endpoints.udacityBase + "StudentLocation"
+            case .getStudentsLocationWithKey:
+                return Endpoints.udacityBase + "StudentLocation?uniqueKey=86528740"
             case .session:
-                return Endpoints.udacityBase + "/session"
+                return Endpoints.udacityBase + "session"
             case .publicUserData:
-                return Endpoints.udacityBase + "/users/\(Auth.key)"
+                return Endpoints.udacityBase + "users/\(UserData.key)"
             }
         }
         
@@ -39,7 +52,7 @@ class OTMClient {
     
     class func getStudentsLocation(completion: @escaping ([StudentsLocation], Error?) -> Void) {
 
-        let task = URLSession.shared.dataTask(with: Endpoints.getStudentsLocation.url) {(data, response, error) in
+        let task = URLSession.shared.dataTask(with: Endpoints.getStudentsLocationWithKey.url) {(data, response, error) in
         
             guard let data = data else {
                 completion([], error)
@@ -58,19 +71,6 @@ class OTMClient {
         }
         
         task.resume()
-    }
-    
-    // The following function helps to create a body for the POST/PUT requests
-    func makeBody<T: Codable>(bodyStructure: T) -> Data? {
-       let jsonEncoder = JSONEncoder()
-       let jsonPOSTData: Data?
-       do {
-          jsonPOSTData = try jsonEncoder.encode(bodyStructure)
-       }catch{
-          print("Encoding error")
-          return nil
-       }
-       return jsonPOSTData
     }
     
     class func login(username: String, password: String, completion: @escaping (Bool, Error?) -> Void) {
@@ -167,6 +167,7 @@ class OTMClient {
                 let responseObject = try decoder.decode(ResponseType.self, from: newData)
                 DispatchQueue.main.async {
                     completion(responseObject, nil)
+                    print(responseObject)
                 }
             } catch {
                 DispatchQueue.main.async {
@@ -184,9 +185,9 @@ class OTMClient {
         
         taskForPOSTRequest(url: Endpoints.session.url, responseType: SessionResponse.self, body: body) { response, error in
             if let response = response {
-                Auth.key = response.account.key
+                UserData.key = response.account.key
                 Auth.sessionId = response.session.id
-                print(Auth.key)
+                print(UserData.key)
                 print(Auth.sessionId)
                 completion(true, nil)
             } else {
@@ -214,7 +215,7 @@ class OTMClient {
             if error != nil { // Handle error…
                 return
             }
-            Auth.key = ""
+            UserData.key = ""
             Auth.sessionId = ""
             
             completion()
@@ -228,14 +229,122 @@ class OTMClient {
         task.resume()
     }
     
-    class func getPublicUserData(completion: @escaping (String?, String?, Error?) -> Void) {
-        taskForGETRequest(url: Endpoints.publicUserData.url, response: User.self) { (response, error) in
-            if let response = response {
-                completion(response.firstName, response.lastName, nil)
-            } else {
-                completion(nil, nil, error)
+    class func getUserData(completion : @escaping (User?,Error?)->Void) {
+        let request = Endpoints.publicUserData.url
+            let session = URLSession.shared
+            let task = session.dataTask(with: request) { data, response, error in
+                if error != nil { // Handle error...
+                    DispatchQueue.main.async {
+                        completion(nil, error)
+                    }
+                }
+                let range = 5..<data!.count
+                let newData = data?.subdata(in: range) /* subset response data! */
+                
+                let decoder = JSONDecoder()
+                do {
+                    
+                    let responseObject = try decoder.decode(User.self, from: newData!)
+                    print(String(data: newData!, encoding: .utf8)!)
+                    UserData.firstName = responseObject.firstName
+                    UserData.lastName = responseObject.lastName
+                    UserData.mediaURL = responseObject.mediaURL ?? ""
+                    print(UserData.firstName + " " + UserData.lastName + " " + UserData.mediaURL)
+                    DispatchQueue.main.async {
+                        completion(responseObject, nil)
+                    }
+                } catch {
+                    print("Error in Udacity Client Login Func")
+                    print(error)
+                    return
+                }
+            }
+            task.resume()
+        }
+    
+    class func postStudentLocation(mapString: String,
+                                   mediaURL: String,
+                                   latitude: Double,
+                                   longitude: Double,
+                                   completion: @escaping (Bool, Error?) -> Void) {
+        
+        let body = AddStudentLocation(uniqueKey: UserData.key, firstName: UserData.firstName, lastName: UserData.lastName, mapString: UserData.mapString, mediaURL: UserData.mediaURL, latitude: UserData.latitude, longitude: UserData.longitude)
+        
+        var urlString: String
+        
+        if (UserData.objectId == "") {
+            urlString = "https://onthemap-api.udacity.com/v1/StudentLocation"
+        } else {
+            urlString = "https://onthemap-api.udacity.com/v1/StudentLocation/\(UserData.objectId)"
+        }
+        
+        let url = URL(string: urlString)
+        var request = URLRequest(url: url!)
+        
+        if (UserData.objectId == "") {
+            request.httpMethod = "POST"
+        } else {
+            request.httpMethod = "PUT"
+        }
+        
+
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try! JSONEncoder().encode(body)
+        let session = URLSession.shared
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data else {
+                DispatchQueue.main.async {
+                    completion(false, error)
+                }
+                return
+            }
+            
+            let decoder = JSONDecoder()
+            do {
+    
+                if (UserData.objectId == "") {
+                    let responseObject = try decoder.decode(AddLocationResponse.self, from: data)
+                    DispatchQueue.main.async {
+                        completion(true, nil)
+                        UserData.objectId = responseObject.objectId
+                        print(responseObject)
+                    }
+                } else {
+                    let responseObject = try decoder.decode(AddLocationResponse1.self, from: data)
+                    DispatchQueue.main.async {
+                        completion(true, nil)
+                        print(responseObject)
+                    }
+                }
+                
+            } catch {
+                DispatchQueue.main.async {
+                    print(error)
+                    completion(false, error)
+                }
             }
         }
+        /*
+        let task = session.dataTask(with: request) {data, response, error in
+            if  data != nil {
+                print(String(data: data!, encoding: .utf8)!)
+                DispatchQueue.main.async {
+                    completion(true, nil)
+                }
+            }
+        
+            if error != nil { // Handle error..
+                print(error)
+                DispatchQueue.main.async {
+                    completion(false, error)
+                }
+                
+            }
+        }
+         */
+        task.resume()
     }
-    
+
+
 }
