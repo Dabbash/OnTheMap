@@ -17,11 +17,17 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         mapView.delegate = self
         
+        OTMClient.getUserData { user, error in
+            print("****** MAP VIEW CONTROLLER ********")
+            print(user)
+        }
+        
         var annotations = [MKPointAnnotation]()
         self.mapView.removeAnnotations(mapView.annotations)
         
         _ = OTMClient.getStudentsLocation() { locations, error in
             
+            //print("**** FROM MAP VIEW CONTROLLER \(locations)")
             for dictionary in locations {
                 // Notice that the float values are being used to create CLLocationDegree values.
                 // This is a version of the Double type.

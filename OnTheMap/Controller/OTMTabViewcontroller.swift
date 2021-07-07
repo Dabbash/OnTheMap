@@ -12,10 +12,10 @@ class OTMTabViewcontroller: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        print("******* TAB VIEW CONTROLLER *******")
         print(OTMClient.UserData.self)
         print(OTMClient.UserData.objectId)
-        
+        print("******* END TAB VIEW CONTROLLER *******")
         
     }
     

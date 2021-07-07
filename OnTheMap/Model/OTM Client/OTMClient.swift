@@ -37,7 +37,7 @@ class OTMClient {
             case .studentsLocation:
                 return Endpoints.udacityBase + "StudentLocation"
             case .getStudentsLocationWithKey:
-                return Endpoints.udacityBase + "StudentLocation?uniqueKey=86528740"
+                return Endpoints.udacityBase + "StudentLocation?uniqueKey=983985615173"
             case .session:
                 return Endpoints.udacityBase + "session"
             case .publicUserData:
@@ -64,6 +64,7 @@ class OTMClient {
             do {
                 let responseObject = try decoder.decode(OTMResults.self, from: data)
                 completion(responseObject.results, nil)
+                print("RESULT !!! \(OTMModel.studentsLocations)")
             } catch {
                 completion([], error)
                 print("error: \(error)")
@@ -100,7 +101,7 @@ class OTMClient {
             
             let range = 5..<data.count
             let newData = data.subdata(in: range) /* subset response data! */
-            print(String(data: newData, encoding: .utf8)!)
+            //print(String(data: newData, encoding: .utf8)!)
             
         }
         
@@ -124,7 +125,7 @@ class OTMClient {
             do {
                 let range = (5..<data.count)
                 let newData = data.subdata(in: range) /* subset response data! */
-                print(String(data: newData, encoding: .utf8)!)
+                //print(String(data: newData, encoding: .utf8)!)
                 
                 let responseObject = try decoder.decode(ResponseType.self, from: data)
                 DispatchQueue.main.async {
@@ -161,7 +162,7 @@ class OTMClient {
             do {
                 let range = (5..<data.count)
                 let newData = data.subdata(in: range) /* subset response data! */
-                print(String(data: newData, encoding: .utf8)!)
+                //print(String(data: newData, encoding: .utf8)!)
                 
                 
                 let responseObject = try decoder.decode(ResponseType.self, from: newData)
@@ -187,8 +188,12 @@ class OTMClient {
             if let response = response {
                 UserData.key = response.account.key
                 Auth.sessionId = response.session.id
+
+                print("****** LOGIN OTMCLIENT ********")
                 print(UserData.key)
                 print(Auth.sessionId)
+                print(UserData.objectId)
+                print("****** END LOGIN OTMCLIENT ********")
                 completion(true, nil)
             } else {
                 completion(false, error)
@@ -222,7 +227,7 @@ class OTMClient {
             
             let range = (5..<data!.count)
             let newData = data?.subdata(in: range) /* subset response data! */
-            print(String(data: newData!, encoding: .utf8)!)
+            //print(String(data: newData!, encoding: .utf8)!)
             
         }
         
@@ -245,10 +250,13 @@ class OTMClient {
                 do {
                     
                     let responseObject = try decoder.decode(User.self, from: newData!)
-                    print(String(data: newData!, encoding: .utf8)!)
+                    //print("****** GETUSERDATA OTMCLIENT ********")
+                    //print(String(data: newData!, encoding: .utf8)!)
                     UserData.firstName = responseObject.firstName
                     UserData.lastName = responseObject.lastName
                     UserData.mediaURL = responseObject.mediaURL ?? ""
+                    UserData.objectId = responseObject.objectId ?? ""
+                    print("*** GETUSERDATA OTMCLIENT ***")
                     print(UserData.firstName + " " + UserData.lastName + " " + UserData.mediaURL)
                     DispatchQueue.main.async {
                         completion(responseObject, nil)
@@ -264,8 +272,8 @@ class OTMClient {
     
     class func postStudentLocation(mapString: String,
                                    mediaURL: String,
-                                   latitude: Double,
-                                   longitude: Double,
+                                   latitude: Float,
+                                   longitude: Float,
                                    completion: @escaping (Bool, Error?) -> Void) {
         
         let body = AddStudentLocation(uniqueKey: UserData.key, firstName: UserData.firstName, lastName: UserData.lastName, mapString: UserData.mapString, mediaURL: UserData.mediaURL, latitude: UserData.latitude, longitude: UserData.longitude)
@@ -308,12 +316,14 @@ class OTMClient {
                     DispatchQueue.main.async {
                         completion(true, nil)
                         UserData.objectId = responseObject.objectId
+                        print("****** POSTSTUDENTLOCATION OTMCLIENT ********")
                         print(responseObject)
                     }
                 } else {
                     let responseObject = try decoder.decode(AddLocationResponse1.self, from: data)
                     DispatchQueue.main.async {
                         completion(true, nil)
+                        print("*** POSTSTUDENTLOCATION OTMCLIENT ***")
                         print(responseObject)
                     }
                 }

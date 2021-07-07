@@ -19,6 +19,7 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+
         
         emailTextField.borderStyle = UITextField.BorderStyle.roundedRect
         passwordTextField.borderStyle = UITextField.BorderStyle.roundedRect
@@ -41,7 +42,8 @@ class LoginViewController: UIViewController {
     func handleLoginResponse(success: Bool, error: Error?) {
         if success {
             OTMClient.getUserData { user, error in
-                print(user)
+                //print("****** LOGIN VIEW CONTROLLER ********")
+                //print(user)
             }
             performSegue(withIdentifier: "loginSuccess", sender: nil)
         } else {

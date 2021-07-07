@@ -13,8 +13,8 @@ class AddLocationViewController: UIViewController, MKMapViewDelegate {
     
     @IBOutlet weak var mapView: MKMapView!
     
-    public var latitude: Double = 0.0
-    public var longitude: Double = 0.0
+    var latitude: Float = 0.0
+    var longitude: Float = 0.0
     
     public var mapString: String = ""
     public var mediaURL: String = ""
@@ -23,13 +23,18 @@ class AddLocationViewController: UIViewController, MKMapViewDelegate {
 
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
 
+  
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         finishButton.layer.cornerRadius = 3
         
-        print(mapString)
         searchLocation()
+        
+        
+        
+        print("PRINT LAT: \(latitude)")
     }
     
     func searchLocation() {
@@ -43,7 +48,7 @@ class AddLocationViewController: UIViewController, MKMapViewDelegate {
             
             guard let response = response else {
                 print("Error: \(error?.localizedDescription ?? "Unknown error").")
-                self.showAlert(message: "We couldn't find this location, please type a correct location")
+                self.showAlert(message: "Couldn't find this location, please type a correct location")
                 return
             }
             
@@ -52,9 +57,6 @@ class AddLocationViewController: UIViewController, MKMapViewDelegate {
                 
             let latitude = response.boundingRegion.center.latitude
             let longitude = response.boundingRegion.center.longitude
-            
-            self.latitude = latitude
-            self.longitude = longitude
                 
             var annotation = MKPointAnnotation()
             annotation.title = self.mapString
@@ -65,6 +67,10 @@ class AddLocationViewController: UIViewController, MKMapViewDelegate {
             let coordinate:CLLocationCoordinate2D = CLLocationCoordinate2DMake(latitude, longitude)
             let span = MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
             let region = MKCoordinateRegion(center: coordinate, span: span)
+            
+            self.latitude = Float(response.boundingRegion.center.latitude)
+            self.longitude = Float(longitude)
+
             self.mapView.setRegion(region, animated: true)
             
         }
@@ -107,25 +113,6 @@ class AddLocationViewController: UIViewController, MKMapViewDelegate {
         }
         
         return pinView
-    }
-    
-    // This delegate method is implemented to respond to taps. It opens the system browser
-    // to the URL specified in the annotationViews subtitle property.
-    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        if control == view.rightCalloutAccessoryView {
-            let app = UIApplication.shared
-            if let toOpen = view.annotation?.subtitle! {
-                app.openURL(URL(string: toOpen)!)
-            }
-        }
-    }
-    
-    func mapView(mapView: MKMapView, annotationView: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-
-        if control == annotationView.rightCalloutAccessoryView {
-            let app = UIApplication.shared
-            app.openURL(NSURL(string: annotationView.annotation?.subtitle! ?? "") as! URL)
-        }
     }
     
     

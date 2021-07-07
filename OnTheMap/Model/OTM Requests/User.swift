@@ -12,12 +12,13 @@ struct User: Codable {
     let lastName: String
     let mediaURL: String?
     let uniqueKey: String
+    let objectId: String?
     
     enum CodingKeys: String, CodingKey {
         case firstName = "first_name"
         case lastName = "last_name"
         case mediaURL = "website_url"
         case uniqueKey = "key"
-        
+        case objectId
     }
 }
