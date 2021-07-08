@@ -18,7 +18,9 @@ class LoginViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        emailTextField.text = "ahmed.dabbash@gmail.com"
+        passwordTextField.text = "Dabbash.92"
         
         emailTextField.borderStyle = UITextField.BorderStyle.roundedRect
         passwordTextField.borderStyle = UITextField.BorderStyle.roundedRect
@@ -40,10 +42,7 @@ class LoginViewController: UIViewController {
     
     func handleLoginResponse(success: Bool, error: Error?) {
         if success {
-            OTMClient.getUserData { user, error in
-                //print("****** LOGIN VIEW CONTROLLER ********")
-                //print(user)
-            }
+            setLoggingIn(false)
             performSegue(withIdentifier: "loginSuccess", sender: nil)
         } else {
             showLoginFailure(message: error?.localizedDescription ?? "")
@@ -68,7 +67,7 @@ class LoginViewController: UIViewController {
         emailTextField.isEnabled = !loggingIn
         passwordTextField.isEnabled = !loggingIn
         loginButton.isEnabled = !loggingIn
-        signupButton.isHidden = !loggingIn
+        signupButton.isEnabled = !loggingIn
     }
 
 }

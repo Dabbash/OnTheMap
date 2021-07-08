@@ -19,8 +19,8 @@ class InformationPostingViewController: UIViewController {
 
         //OTMClient.LocationDetails.firstName = "Noon"
         //OTMClient.LocationDetails.lastName = "Moon"
-        OTMClient.UserData.mapString = locationNameTextField.text!
-        OTMClient.UserData.mediaURL = linkedinTextField.text!
+        UserData.mapString = locationNameTextField.text!
+        UserData.mediaURL = linkedinTextField.text!
         
     }
     

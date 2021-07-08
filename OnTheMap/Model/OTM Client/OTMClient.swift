@@ -13,22 +13,12 @@ class OTMClient {
         static var sessionId = ""
     }
     
-    struct UserData {
-        static var key = ""
-        static var firstName = ""
-        static var lastName = ""
-        static var longitude: Float = 0.0
-        static var latitude: Float = 0.0
-        static var mapString = ""
-        static var mediaURL = ""
-        static var objectId = ""
-    }
     
     enum Endpoints {
         static let udacityBase = "https://onthemap-api.udacity.com/v1/"
         
         case studentsLocation
-        case getStudentsLocationWithKey
+        case getStudentsLocation
         case session
         case publicUserData
 
@@ -36,7 +26,7 @@ class OTMClient {
             switch self {
             case .studentsLocation:
                 return Endpoints.udacityBase + "StudentLocation"
-            case .getStudentsLocationWithKey:
+            case .getStudentsLocation:
                 return Endpoints.udacityBase + "StudentLocation?order=-updatedAt"
             case .session:
                 return Endpoints.udacityBase + "session"
@@ -52,10 +42,11 @@ class OTMClient {
     
     class func getStudentsLocation(completion: @escaping ([StudentsLocation], Error?) -> Void) {
 
-        let task = URLSession.shared.dataTask(with: Endpoints.getStudentsLocationWithKey.url) {(data, response, error) in
-        
+        let task = URLSession.shared.dataTask(with: Endpoints.getStudentsLocation.url) {(data, response, error) in
+
             guard let data = data else {
                 completion([], error)
+                print(error)
                 return
             }
             
@@ -64,7 +55,7 @@ class OTMClient {
             do {
                 let responseObject = try decoder.decode(OTMResults.self, from: data)
                 completion(responseObject.results, nil)
-                print("RESULT !!! \(OTMModel.studentsLocations)")
+                //print("RESULT !!! \(OTMModel.studentsLocations)")
             } catch {
                 completion([], error)
                 print("error: \(error)")
@@ -218,6 +209,7 @@ class OTMClient {
         let session = URLSession.shared
         let task = session.dataTask(with: request) { data, response, error in
             if error != nil { // Handle error…
+                print(error)
                 return
             }
             UserData.key = ""

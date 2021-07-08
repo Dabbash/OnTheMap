@@ -12,16 +12,13 @@ class OTMTabViewcontroller: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("******* TAB VIEW CONTROLLER *******")
-        print(OTMClient.UserData.self)
-        print(OTMClient.UserData.objectId)
-        print("******* END TAB VIEW CONTROLLER *******")
+
         
     }
     
     @IBAction func postInformationActionButton(_ sender: Any) {
         
-        if (OTMClient.UserData.objectId == "") {
+        if (UserData.objectId == "") {
             presentPostInformationVC()
         } else {
             showAlert(message: "You Have Already Posted a Student Location, Whould You Like To Overwrite Your Current Location?")
@@ -56,7 +53,9 @@ class OTMTabViewcontroller: UITabBarController {
     
     @IBAction func refreshButtonAction(_ sender: Any) {
         print("calling")
-        StudentsLocationTableViewController().refreshData()
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refresh"), object: nil)
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshMap"), object: nil)
+
     }
     
 }

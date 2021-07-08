@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8960878926965D6E006A9EA3 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8960878826965D6E006A9EA3 /* UserData.swift */; };
 		898012702696004E00948E49 /* AddStudentLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8980126F2696004E00948E49 /* AddStudentLocation.swift */; };
 		8980127226961AA200948E49 /* AddLocationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8980127126961AA200948E49 /* AddLocationResponse.swift */; };
 		8984109E268FA4D700E48810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8984109D268FA4D700E48810 /* AppDelegate.swift */; };
@@ -32,6 +33,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8960878826965D6E006A9EA3 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
 		8980126F2696004E00948E49 /* AddStudentLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddStudentLocation.swift; sourceTree = "<group>"; };
 		8980127126961AA200948E49 /* AddLocationResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddLocationResponse.swift; sourceTree = "<group>"; };
 		8984109A268FA4D700E48810 /* OnTheMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnTheMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -134,6 +136,7 @@
 			isa = PBXGroup;
 			children = (
 				898410CA2690931300E48810 /* OTMModel.swift */,
+				8960878826965D6E006A9EA3 /* UserData.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -267,6 +270,7 @@
 				898410D7269100AF00E48810 /* AddLocationViewController.swift in Sources */,
 				8980127226961AA200948E49 /* AddLocationResponse.swift in Sources */,
 				898410CB2690931300E48810 /* OTMModel.swift in Sources */,
+				8960878926965D6E006A9EA3 /* UserData.swift in Sources */,
 				898410C22690510500E48810 /* LoginRequest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

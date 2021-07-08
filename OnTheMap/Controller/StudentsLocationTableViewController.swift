@@ -20,6 +20,8 @@ class StudentsLocationTableViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: NSNotification.Name(rawValue: "refresh"), object: nil)
+
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -75,13 +77,14 @@ extension StudentsLocationTableViewController: UITableViewDataSource, UITableVie
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    func refreshData() {
-        print("called")
+    @objc func refreshData() {
         _ = OTMClient.getStudentsLocation() { locations, error in
             OTMModel.studentsLocations = locations
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
+            
+            print(error)
         }
     }
     

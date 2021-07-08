@@ -19,28 +19,25 @@ class AddLocationViewController: UIViewController, MKMapViewDelegate {
     public var mapString: String = ""
     public var mediaURL: String = ""
     
+    
     @IBOutlet weak var finishButton: UIButton!
 
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
-
-  
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         finishButton.layer.cornerRadius = 3
-        
         searchLocation()
         
-        
-        
-        print("PRINT LAT: \(latitude)")
     }
     
     func searchLocation() {
-        
         let searchRequest = MKLocalSearch.Request()
         searchRequest.naturalLanguageQuery = self.mapString
+        
+        UserData.mapString = self.mapString
+        UserData.mediaURL = self.mediaURL
         
         let activeSearch = MKLocalSearch(request: searchRequest)
         
@@ -57,7 +54,10 @@ class AddLocationViewController: UIViewController, MKMapViewDelegate {
                 
             let latitude = response.boundingRegion.center.latitude
             let longitude = response.boundingRegion.center.longitude
-                
+            
+            UserData.latitude = Float(latitude)
+            UserData.longitude = Float(longitude)
+            
             var annotation = MKPointAnnotation()
             annotation.title = self.mapString
             annotation.subtitle = self.mediaURL
@@ -68,8 +68,8 @@ class AddLocationViewController: UIViewController, MKMapViewDelegate {
             let span = MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)
             let region = MKCoordinateRegion(center: coordinate, span: span)
             
-            self.latitude = Float(response.boundingRegion.center.latitude)
-            self.longitude = Float(longitude)
+            //self.latitude = Float(response.boundingRegion.center.latitude)
+            //self.longitude = Float(longitude)
 
             self.mapView.setRegion(region, animated: true)
             
@@ -127,6 +127,17 @@ class AddLocationViewController: UIViewController, MKMapViewDelegate {
         self.present(alert, animated: true)
     }
     
+    func showPassedData(message: String){
+        let alert = UIAlertController(title: "Passed Data Alert For Test", message: message, preferredStyle: .alert)
+
+        alert.addAction(UIAlertAction(title: "Go Back", style: .default, handler: { action in
+                                        _ = self.navigationController?.popViewController(animated: true)
+
+                                      }))
+
+        self.present(alert, animated: true)
+    }
+    
     @IBAction func finishButtonAction(_ sender: Any) {
         setSendingLocation(true)
         OTMClient.postStudentLocation(mapString: self.mapString,
@@ -139,7 +150,10 @@ class AddLocationViewController: UIViewController, MKMapViewDelegate {
     func handleAddLocationResponse(success: Bool, error: Error?) {
         if success {
             DispatchQueue.main.async {
+                //For test perpuse I commented bellow code
                 self.dismiss(animated: true, completion: nil)
+                
+                //self.showPassedData(message: "FirstName: \(UserData.firstName) - mapString: \(UserData.mapString) - mediaURL: \(UserData.mediaURL) - latitude: \(UserData.latitude) - longitude: \(UserData.longitude)")
             }
         } else {
             setSendingLocation(false)
