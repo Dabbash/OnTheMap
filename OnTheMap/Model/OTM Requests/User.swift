@@ -8,17 +8,17 @@
 import Foundation
 
 struct User: Codable {
+    let uniqueKey: String
     let firstName: String
     let lastName: String
     let mediaURL: String?
-    let uniqueKey: String
     let objectId: String?
     
     enum CodingKeys: String, CodingKey {
+        case uniqueKey = "key"
         case firstName = "first_name"
         case lastName = "last_name"
         case mediaURL = "website_url"
-        case uniqueKey = "key"
         case objectId
     }
 }
